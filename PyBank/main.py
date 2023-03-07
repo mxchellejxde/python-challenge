@@ -1,6 +1,7 @@
 import os
 import csv
 
+#determine current directory and direct to the budget file
 cwd = os.getcwd()
 csvpath = os.path.join(cwd,'Resources','budget_data.csv')
 
@@ -19,7 +20,10 @@ month = []
 #set dataset to go through with reader
 with open(csvpath) as csvfile:
     csvreader = csv.reader(csvfile, delimiter= ',')
+
+    #store header
     csv_header=next(csvreader)
+
     #loop through dataset to calculate
     for row in csvreader:
         month_count = month_count + 1
@@ -27,11 +31,11 @@ with open(csvpath) as csvfile:
         current_month.append(int(row[1]))
         month.append(row[0])
         net_income = net_income + int(row[1])
-#remove last position for prior month and first position for current month in order to calculate difference
 
+#remove last position for prior month and first position for current month in order to calculate difference
 prior_month.pop(85)
 current_month.pop(0)
-#print(net_income)
+
 #zip amounts into a new list
 new_month_list = zip(prior_month, current_month)
 
@@ -44,18 +48,18 @@ for i,j in new_month_list:
 max_increase_index = monthly_change_array.index(max(monthly_change_array))+1
 max_increase = monthly_change_array[max_increase_index-1]
 max_increase_month = month[max_increase_index]
-#print(max_increase_month)
+
+#determine position of max decrease as well as the amount of max decrease
     #max decrease
 max_decrease_index = monthly_change_array.index(min(monthly_change_array))+1
 max_decrease = monthly_change_array[max_decrease_index-1]
 max_decrease_month = month[max_decrease_index]
-#print(max_decrease_month)
 
-#other calculations
+#other calculations to support average calc
 total_change = sum(monthly_change_array)
 average_change = round((total_change/(month_count-1)),2)
-#print(total_change)
-#create output file
+
+#create output file and the results
 output_file = os.path.join(cwd,"analysis","output.csv")
 with open(output_file, "w") as datafile:
     writer = csv.writer(datafile)
@@ -68,6 +72,7 @@ with open(output_file, "w") as datafile:
     writer.writerow(["Greatest Increase in Profits: "+max_increase_month+" ($"+str(max_increase)+")"])
     writer.writerow(["Greatest Decrease in Profits: "+max_decrease_month+" ($"+str(max_decrease)+")"])
 
+#print results to terminal
 print("Financial Analysis")
 print("----------------------------")
 print("Total Months: "+str(month_count))
