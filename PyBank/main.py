@@ -67,3 +67,11 @@ with open(output_file, "w") as datafile:
     writer.writerow(["Average Change: $"+str(average_change)])
     writer.writerow(["Greatest Increase in Profits: "+max_increase_month+" ($"+str(max_increase)+")"])
     writer.writerow(["Greatest Decrease in Profits: "+max_decrease_month+" ($"+str(max_decrease)+")"])
+
+print("Financial Analysis")
+print("----------------------------")
+print("Total Months: "+str(month_count))
+print("Total: $"+str(net_income))
+print("Average Change: $"+str(average_change))
+print("Greatest Increase in Profits: "+max_increase_month+" ($"+str(max_increase)+")")
+print("Greatest Decrease in Profits: "+max_decrease_month+" ($"+str(max_decrease)+")")
