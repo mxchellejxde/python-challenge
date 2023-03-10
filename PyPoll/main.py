@@ -1,6 +1,5 @@
 import os
 import csv
-import math
 
 #determine current directory and direct to the election file to read
 cwd = os.getcwd()
@@ -15,6 +14,7 @@ unique_candidates = {"Name":[],"Vote Count":[], "Percent of Votes": []}
 vote_count = []
 max_vote = "X"
 max_vote_count = 0
+index = 0
 
 #set dataset to go through with reader
 with open(csvpath) as csvfile:
@@ -31,6 +31,7 @@ with open(csvpath) as csvfile:
 candidates_list = sorted(candidates_list)        
 total_vote_count = len(candidates_list)
 
+#create a dictionary of the election results: name, vote count, percent of votes as keys and appending the values into the dictionary with every total result
 for row in candidates_list:
     if candidate != row:
         unique_candidates["Name"].append(row)
@@ -42,17 +43,51 @@ for row in candidates_list:
             max_vote = row
     candidate = row
 
-print(total_vote_count)
-# winner = unique_candidates[unique_candidates.index(unique_candidates)]
-print(max_vote)
-print(unique_candidates)
+#create output file and the results
+output_file = os.path.join(cwd,"analysis","output.csv")
+with open(output_file, "w") as datafile:
+    writer = csv.writer(datafile)
+    #write file for election results
+    writer.writerow(["Election Results"])
+    writer.writerow(["-------------------------"])
+    #TERMINAL - print results to terminal
+    print("Election Results")
+    print("-------------------------")
     
-#          vote_count.append(total_votes)
-#          candidate = str(row[0])
-#          unique_candidates.append(str(row[0]))
-#          total_votes = 1
-#     else: total_votes += 1
 
-# print(vote_count)
-# print(unique_candidates)    
+    #write the total vote count
+    writer.writerow(["Total Votes: "+str(total_vote_count)])
+    writer.writerow(["-------------------------"])
+    #TERMINAL - print total votes
+    print("Total Votes: "+str(total_vote_count))
+    print("-------------------------")
+
+#iterate through the list of candidates and print/write the results of the election
+    while index < len(unique_candidates["Name"]):
+        name = unique_candidates["Name"][index]
+        percent = str(unique_candidates["Percent of Votes"][index])
+        vote = str(unique_candidates["Vote Count"][index])
+        #write to CSV the list of candidates and the result of election
+        writer.writerow([name
+            + ": "
+            + percent
+            + "% ("
+            + vote
+            +")"])
+        #TERMINAL - print the list of candidates and the result of election
+        print(name
+            + ": "
+            + percent
+            + "% ("
+            + vote
+            +")")
+        index +=1
+    #write the winner into the file
+    writer.writerow(["-------------------------"])
+    writer.writerow(["Winner: "+max_vote])
+    writer.writerow(["-------------------------"])
+    #TERMINAL - print the winner of the election into terminal
+    print("-------------------------")
+    print("Winner: "+max_vote)
+    print("-------------------------")
 
